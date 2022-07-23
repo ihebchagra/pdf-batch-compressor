@@ -20,11 +20,30 @@ def compress(input_file_path, output_file_path):
 	print("Compress PDF...")
 	initial_size = os.path.getsize(input_file_path)
 	subprocess.call([gs, '-sDEVICE=pdfwrite', '-dCompatibilityLevel=1.4',
-	                '-dPDFSETTINGS=/screen',
+	                #'-dPDFSETTINGS=/screen',
 	                '-dNOPAUSE', '-dQUIET', '-dBATCH',
+					'-dSAFER',
+	                '-dSubsetFonts=true',
+	                '-dUseFlateCompression=true',
+	                '-dOptimize=true',
+	                '-dProcessColorModel=/DeviceRGB',
+	                '-dDownsampleGreyImages=true',
+	                '-dGrayImageDownsampleType=/Bicubic',
+	                '-dGrayImageResolution=65',
+	                '-dAutoFilterGrayImages=false',
+	                '-dDownsampleMonoImages=true',
+	                '-dMonoImageDownsampleType=/Bicubic',
+	                '-dMonoImageResolution=65',
+	                '-dCompressPages=true',
+	                '-dDownsampleColorImages=true',
+	                '-dColorImageDownsampleType=/Bicubic',
+	                '-dColorImageResolution=65',
+	                '-dAutoFilterGrayImages=false',
 	                '-sOutputFile={}'.format(output_file_path),
 	                 input_file_path]
 	)
+
+
 	final_size = os.path.getsize(output_file_path)
 	ratio = 1 - (final_size / initial_size)
 	print("Compression by {0:.0%}.".format(ratio))
